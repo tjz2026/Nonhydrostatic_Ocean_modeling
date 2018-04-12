@@ -1,0 +1,4 @@
+(PID.TID 0000.0001) SOLUTION IS HEADING OUT OF BOUNDS: tMin,tMax= -5.012E+02  5.012E+02
+(PID.TID 0000.0001)   exceeds allowed range (monSolutionMaxRange=  1.000E+03)
+(PID.TID 0000.0001) MON_SOLUTION: STOPPING CALCULATION at Iter=         0
+(PID.TID 0000.0001) *** ERROR *** S/R ALL_PROC_DIE: ending the run

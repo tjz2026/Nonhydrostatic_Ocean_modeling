@@ -1,0 +1,127 @@
+
+running: find_possible_optfile()
+  The platform appears to be:  linux_amd64
+  look for possible FORTRAN compilers
+efc -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: efc: command not found
+gfortran -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: gfortran: command not found
+g77 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: g77: command not found
+f77 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: f77: command not found
+pgf77 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: pgf77: command not found
+pgf95 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: pgf95: command not found
+ifc -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: ifc: command not found
+ifort -o genmake_hello genmake_hello.f
+ ifort test successful
+f90 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: f90: command not found
+f95 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: f95: command not found
+mpif77 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: mpif77: command not found
+mpf77 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: mpf77: command not found
+mpxlf95 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: mpxlf95: command not found
+g95 -o genmake_hello genmake_hello.f
+../../../tools/genmake2: line 553: g95: command not found
+  The possible FORTRAN compilers found in your path are:  ifort
+  Setting OPTFILE to: ../../../tools/build_options/linux_amd64_ifort
+Get compiler version using: ifort --version
+/home/app/intel/bin/ifort
+ifort (IFORT) 18.0.1 20171018
+Copyright (C) 1985-2017 Intel Corporation.  All rights reserved.
+
+<-- compiler version ----
+
+running: look_for_makedepend()
+ --> set MAKEDEPEND=$(TOOLSDIR)/xmakedepend
+
+running: check_HAVE_CLOC()
+ running: get_fortran_c_namemangling()
+ icc -O0 -ip -fPIC -c genmake_test.c
+ ifort -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -c genmake_tcomp.f
+ifort: command line remark #10148: option '-w95' not supported
+ --> set FC_NAMEMANGLE='#define FC_NAMEMANGLE(X)  X ## _'
+icc -O0 -ip -fPIC -c genmake_tc_1.c
+ifort -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -o genmake_tc genmake_tc_2.f genmake_tc_1.o
+ifort: command line remark #10148: option '-w95' not supported
+  HELLO WORLD   1523436198.63247     
+ --> set HAVE_CLOC='t'
+
+running: check_HAVE_SETRLSTK()
+icc -O0 -ip -fPIC -c genmake_tc_1.c
+      program hello
+      external setrlstk
+      call setrlstk()
+      end
+ifort -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -o genmake_tc genmake_tc_2.f genmake_tc_1.o
+ifort: command line remark #10148: option '-w95' not supported
+ --> set HAVE_SETRLSTK='t'
+
+running: check_HAVE_SIGREG()
+icc -O0 -ip -fPIC -c genmake_tc_1.c
+      program hello
+      integer anint
+      common /iv/ anint
+      external sigreg
+      call sigreg(anint)
+      end
+ifort -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -o genmake_tc genmake_tc_2.f genmake_tc_1.o
+ifort: command line remark #10148: option '-w95' not supported
+ --> set HAVE_SIGREG='t'
+
+running: check_HAVE_STAT()
+icc -O0 -ip -fPIC -c genmake_tc_1.c
+      program hello
+      integer nbyte
+      call tfsize(nbyte)
+      print *," HELLO WORLD", nbyte
+      end
+ifort -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -o genmake_tc genmake_tc_2.f genmake_tc_1.o
+ --> set HAVE_STAT='t'
+
+running: check_netcdf_libs()
+===  genmake_tnc.F  >>>
+      program fgennc
+#include "netcdf.inc"
+      integer iret, ncid, xid
+      iret = nf_create('genmake_tnc.nc', NF_CLOBBER, ncid)
+      IF (iret .NE. NF_NOERR) write(*,*) NF_STRERROR(iret)
+      iret = nf_def_dim(ncid, 'X', 11, xid)
+      IF (iret .NE. NF_NOERR) write(*,*) NF_STRERROR(iret)
+      iret = nf_close(ncid)
+      IF (iret .NE. NF_NOERR) write(*,*) NF_STRERROR(iret)
+      end
+<<<  genmake_tnc.F  ===
+cat genmake_tnc.F |  cpp -traditional -P -DWORDLENGTH=4 -DHAVE_SYSTEM -DHAVE_FDATE -DHAVE_ETIME_FCT -DHAVE_CLOC -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT 
+  WARNING: CPP failed to pre-process the netcdf test.
+    Please check that $INCLUDES is properly set.
+ifort  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -c genmake_tnc.f  \ 
+  &&  ifort -i-dynamic -no-ipo  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -o genmake_tnc.o 
+ifort: command line remark #10148: option '-w95' not supported
+ifort: command line warning #10131: extension 'W' not supported ignored in option '-x'
+genmake_tnc.f(12): error #5082: Syntax error, found END-OF-FILE when expecting one of: <LABEL> <END-OF-STATEMENT> ; TYPE INTEGER REAL COMPLEX BYTE CHARACTER CLASS DOUBLE ...
+      program fgennc
+--------------------^
+compilation aborted for genmake_tnc.f (code 1)
+
+==> try again with added '-lnetcdf'
+cat genmake_tnc.F |  cpp -traditional -P -DWORDLENGTH=4 -DHAVE_SYSTEM -DHAVE_FDATE -DHAVE_ETIME_FCT -DHAVE_CLOC -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT  > genmake_tnc.f \ 
+ &&  ifort  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -c genmake_tnc.f \ 
+ &&  ifort -i-dynamic -no-ipo  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -o genmake_tnc genmake_tnc.o  -lnetcdf
+
+==> try again with added '-lnetcdff -lnetcdf'
+cat genmake_tnc.F |  cpp -traditional -P -DWORDLENGTH=4 -DHAVE_SYSTEM -DHAVE_FDATE -DHAVE_ETIME_FCT -DHAVE_CLOC -DHAVE_SETRLSTK -DHAVE_SIGREG -DHAVE_STAT  > genmake_tnc.f \ 
+ &&  ifort  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -c genmake_tnc.f \ 
+ &&  ifort -i-dynamic -no-ipo  -w95 -W0 -WB -convert big_endian -assume byterecl -fPIC -O2 -align -xW -ip -o genmake_tnc genmake_tnc.o  -lnetcdf
+ --> set HAVE_NETCDF=''
+
+running: check_HAVE_FLUSH()
+  check_HAVE_FLUSH: successful
+ --> set HAVE_FLUSH='t'
