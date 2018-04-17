@@ -1,0 +1,4 @@
+ifort -c -O3 param.f90 
+ifort -c -O3 sub.f90
+ifort -c -O3 main.f90
+ifort *.o -o main
